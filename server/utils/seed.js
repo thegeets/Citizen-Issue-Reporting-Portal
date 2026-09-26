@@ -9,6 +9,78 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
+export const syncAdminUser = async () => {
+  try {
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/citizen_portal';
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(mongoUri);
+    }
+
+    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@municipality.gov').toLowerCase().trim();
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@12345';
+    const adminName = process.env.ADMIN_NAME || 'Municipal Administrator';
+
+    // 1. Try to find user by the configured ADMIN_EMAIL
+    let admin = await User.findOne({ email: adminEmail }).select('+password');
+
+    if (admin) {
+      // Ensure admin privileges
+      let changed = false;
+      if (admin.role !== 'admin') {
+        admin.role = 'admin';
+        changed = true;
+      }
+      if (adminName && admin.name !== adminName) {
+        admin.name = adminName;
+        changed = true;
+      }
+
+      // Check if password has changed in .env
+      const isMatch = await admin.matchPassword(adminPassword);
+      if (!isMatch) {
+        admin.password = adminPassword; // Triggers bcrypt pre-save hook
+        changed = true;
+        console.log(`[Admin Sync] Admin password updated from .env for ${adminEmail}`);
+      }
+
+      if (changed) {
+        await admin.save();
+      }
+      console.log(`[Admin Sync] Administrator verified: ${adminEmail}`);
+      return admin;
+    }
+
+    // 2. If not found by email, check if another admin user exists (e.g. email changed in .env)
+    let existingAdmin = await User.findOne({ role: 'admin' }).select('+password');
+    if (existingAdmin) {
+      existingAdmin.email = adminEmail;
+      existingAdmin.name = adminName;
+      
+      const isMatch = await existingAdmin.matchPassword(adminPassword);
+      if (!isMatch) {
+        existingAdmin.password = adminPassword;
+      }
+
+      await existingAdmin.save();
+      console.log(`[Admin Sync] Administrator email & credentials updated to: ${adminEmail}`);
+      return existingAdmin;
+    }
+
+    // 3. If no admin account exists at all, create a new one
+    admin = await User.create({
+      name: adminName,
+      email: adminEmail,
+      password: adminPassword,
+      role: 'admin',
+      phone: '+1 800-555-ADMIN',
+    });
+    console.log(`[Admin Sync] New Municipal Administrator created: ${adminEmail}`);
+    return admin;
+  } catch (err) {
+    console.error('[Admin Sync Error]:', err.message);
+  }
+};
+
 export const seedDatabase = async () => {
   try {
     const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/citizen_portal';
@@ -16,9 +88,12 @@ export const seedDatabase = async () => {
       await mongoose.connect(mongoUri);
     }
 
-    console.log('[Seed] Checking sample data...');
+    console.log('[Seed] Synchronizing and checking database...');
 
-    // 1. Check/Seed Sample Citizen User for testing/demo purposes if needed
+    // 1. Synchronize Admin Account from .env
+    await syncAdminUser();
+
+    // 2. Check/Seed Sample Citizen User for testing/demo purposes if needed
     let citizen = await User.findOne({ email: 'jane@citizen.org' });
     if (!citizen) {
       citizen = await User.create({

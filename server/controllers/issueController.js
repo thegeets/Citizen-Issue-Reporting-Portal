@@ -16,10 +16,10 @@ export const createIssue = async (req, res, next) => {
 
     let imageUrl = '';
     if (req.file) {
-      // Multer file upload
-      imageUrl = `/uploads/${req.file.filename}`;
-    } else if (req.body.image) {
-      imageUrl = req.body.image;
+      // Multer file upload saved in /uploads/issues/
+      imageUrl = `/uploads/issues/${req.file.filename}`;
+    } else if (req.body.image || req.body.photo) {
+      imageUrl = req.body.image || req.body.photo;
     }
 
     const issue = await Issue.create({
@@ -28,6 +28,7 @@ export const createIssue = async (req, res, next) => {
       description: description.trim(),
       location: location.trim(),
       image: imageUrl,
+      photo: imageUrl,
       priority: priority || 'Medium',
       user: req.user._id,
       status: 'Submitted',
@@ -206,9 +207,11 @@ export const updateIssue = async (req, res, next) => {
     if (priority) issue.priority = priority;
 
     if (req.file) {
-      issue.image = `/uploads/${req.file.filename}`;
-    } else if (req.body.image) {
-      issue.image = req.body.image;
+      issue.image = `/uploads/issues/${req.file.filename}`;
+      issue.photo = `/uploads/issues/${req.file.filename}`;
+    } else if (req.body.image || req.body.photo) {
+      issue.image = req.body.image || req.body.photo;
+      issue.photo = req.body.image || req.body.photo;
     }
 
     await issue.save();

@@ -26,10 +26,30 @@ connectDB().then(() => {
   seedDatabase();
 });
 
-// Middleware
+// CORS Configuration for multi-port local development & production
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin) return callback(null, true);
+      if (
+        allowedOrigins.includes(origin) ||
+        origin.startsWith('http://localhost:') ||
+        origin.startsWith('http://127.0.0.1:')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true); // Permissive in dev mode
+    },
     credentials: true,
   })
 );
@@ -57,7 +77,7 @@ app.use('/api/admin', adminRoutes);
 app.use(errorHandler);
 
 // Start Server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`====================================================`);
   console.log(`🚀 Citizen Issue Reporting Portal API Server running`);
   console.log(`📍 URL: http://localhost:${PORT}`);

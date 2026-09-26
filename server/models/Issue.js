@@ -61,6 +61,10 @@ const issueSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    photo: {
+      type: String,
+      default: '',
+    },
     priority: {
       type: String,
       enum: ['Low', 'Medium', 'High', 'Urgent'],
@@ -86,6 +90,15 @@ const issueSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        if (!ret.photo && ret.image) ret.photo = ret.image;
+        if (!ret.image && ret.photo) ret.image = ret.photo;
+        return ret;
+      },
+    },
+    toObject: { virtuals: true },
   }
 );
 
@@ -95,6 +108,13 @@ issueSchema.pre('save', async function (next) {
     const randomSuffix = String(Math.floor(100000 + Math.random() * 900000));
     const dateStr = new Date().getFullYear();
     this.issueId = `CIR-${dateStr}-${randomSuffix}`;
+  }
+
+  // Ensure image and photo fields match
+  if (this.image && !this.photo) {
+    this.photo = this.image;
+  } else if (this.photo && !this.image) {
+    this.image = this.photo;
   }
 
   // Initialize status history if empty
