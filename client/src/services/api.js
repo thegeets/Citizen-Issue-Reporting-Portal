@@ -1,4 +1,4 @@
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 // Helper to get auth header with token
 const getAuthHeaders = (isFormData = false) => {
@@ -16,19 +16,41 @@ const getAuthHeaders = (isFormData = false) => {
   return headers;
 };
 
-// Generic fetch wrapper with clean error extraction
+// Generic fetch wrapper with robust error extraction & network handling
 async function request(endpoint, options = {}) {
   const url = `${API_BASE}${endpoint}`;
-  const response = await fetch(url, options);
+  let response;
 
-  let data;
   try {
-    data = await response.json();
-  } catch (err) {
-    data = { success: false, message: 'Invalid response from server' };
+    response = await fetch(url, options);
+  } catch (netErr) {
+    console.error(`[API Network Error] Failed to fetch ${url}:`, netErr.message);
+    throw new Error('Unable to connect to the backend server. Please verify the backend is running at http://localhost:5000.');
   }
 
-  if (!response.ok) {
+  let data;
+  const contentType = response.headers.get('content-type') || '';
+
+  if (contentType.includes('application/json')) {
+    try {
+      data = await response.json();
+    } catch (parseErr) {
+      data = { success: false, message: 'Invalid JSON payload received from server' };
+    }
+  } else {
+    // Non-JSON response (e.g. proxy HTML error, 502/504 gateway timeout, or SPA fallback)
+    const text = await response.text();
+    if (!response.ok) {
+      if (response.status === 502 || response.status === 503 || response.status === 504) {
+        throw new Error('Backend server is currently unreachable on port 5000. Please start the backend service.');
+      }
+      throw new Error(`Server returned HTTP ${response.status}: ${response.statusText || 'Error'}`);
+    }
+    // If response was 200 OK but returned HTML instead of JSON for an API call
+    throw new Error('Unexpected response format received from server. Please check the API endpoint.');
+  }
+
+  if (!response.ok || (data && data.success === false)) {
     const errorMsg = data.message || `Request failed with status ${response.status}`;
     throw new Error(errorMsg);
   }
@@ -154,3 +176,5 @@ export const api = {
       body: JSON.stringify(data),
     }),
 };
+
+export default api;

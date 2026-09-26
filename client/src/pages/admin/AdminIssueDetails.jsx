@@ -15,6 +15,10 @@ import {
   AlertCircle,
   Clock,
   Edit3,
+  Camera,
+  ImageOff,
+  Maximize2,
+  ExternalLink,
 } from 'lucide-react';
 import { StatusBadge, PriorityBadge } from '../../components/common/Badge';
 import Button from '../../components/common/Button';
@@ -23,6 +27,7 @@ import IssueTimeline from '../../components/issues/IssueTimeline';
 import Modal from '../../components/common/Modal';
 import Loader from '../../components/common/Loader';
 import EmptyState from '../../components/common/EmptyState';
+import { getImageUrl } from '../../utils/imageUrl';
 
 const STATUS_OPTIONS = [
   { value: 'Submitted', label: 'Submitted' },
@@ -39,6 +44,7 @@ export const AdminIssueDetails = () => {
 
   const [issue, setIssue] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageModalOpen, setImageModalOpen] = useState(false);
 
   // Status Form state
   const [status, setStatus] = useState('');
