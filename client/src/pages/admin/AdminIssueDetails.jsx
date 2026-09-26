@@ -181,7 +181,7 @@ export const AdminIssueDetails = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
                 gap: '1rem',
                 paddingTop: '1.5rem',
                 borderTop: '1px solid var(--border-light)',
@@ -211,7 +211,7 @@ export const AdminIssueDetails = () => {
               <h3 style={{ fontSize: '1.1rem' }}>Citizen Reporter Information</h3>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '1rem' }}>
               <div>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block' }}>Name</span>
                 <strong style={{ fontSize: '0.95rem' }}>{issue.user?.name || 'Citizen'}</strong>

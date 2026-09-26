@@ -13,6 +13,9 @@ import {
   ShieldCheck,
   Navigation,
   CheckCircle,
+  Layers,
+  FileText,
+  Camera,
 } from 'lucide-react';
 import { Input, TextArea, Select } from '../components/common/Input';
 import Button from '../components/common/Button';
@@ -157,14 +160,14 @@ export const ReportIssue = () => {
 
   return (
     <div className="container main-content animate-fade-in">
-      <div style={{ maxWidth: '780px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '820px', margin: '0 auto' }}>
         {/* Breadcrumb / Title */}
         <div style={{ marginBottom: '2rem' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: 'var(--primary-blue)', fontWeight: 600, fontSize: '0.85rem', marginBottom: '0.5rem' }}>
             <FilePlus size={16} /> {t('report.badge', 'New Grievance Registration')}
           </div>
           <h1>{t('report.title', 'Report a Public Issue')}</h1>
-          <p style={{ marginTop: '0.25rem' }}>
+          <p style={{ marginTop: '0.25rem', fontSize: '0.95rem' }}>
             {t('report.subtitle', 'Provide accurate details and photos to help municipal field crews quickly locate and resolve the issue.')}
           </p>
         </div>
@@ -205,160 +208,219 @@ export const ReportIssue = () => {
 
         <div className="civic-card" style={{ padding: '2rem' }}>
           <form onSubmit={handleSubmit}>
-            {/* Title */}
-            <Input
-              label={t('report.issueTitle', 'Issue Title')}
-              name="title"
-              placeholder={t('report.issueTitlePlaceholder', 'Large pothole near Lakeside road')}
-              value={formData.title}
-              onChange={handleChange}
-              required
-              hint={t('report.issueTitleHint', 'Keep the title brief, clear, and descriptive.')}
-            />
-
-            {/* Category and Priority Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
-              <Select
-                label={t('report.category', 'Municipal Category')}
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                options={categoryOptions}
-                required
-                placeholder={null}
-              />
-
-              <Select
-                label={t('report.priority', 'Priority Level')}
-                name="priority"
-                value={formData.priority}
-                onChange={handleChange}
-                options={priorityOptions}
-                required
-                placeholder={null}
-              />
-            </div>
-
-            {/* Description */}
-            <TextArea
-              label={t('report.description', 'Detailed Description')}
-              name="description"
-              placeholder={t('report.descriptionPlaceholder', 'Please describe the issue and provide any useful details.')}
-              value={formData.description}
-              onChange={handleChange}
-              required
-              rows={5}
-              hint={t('report.descriptionHint', 'Include all relevant context that helps municipal engineers evaluate the problem.')}
-            />
-
-            {/* Location with GPS Helper */}
-            <div className="form-group">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                <label className="form-label" htmlFor="location" style={{ marginBottom: 0 }}>
-                  <span>{t('report.location', 'Location / Landmark Address')} <span className="required">*</span></span>
-                </label>
-                <button
-                  type="button"
-                  onClick={handleGetLocation}
-                  disabled={locating}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.3rem',
-                    background: 'none',
-                    border: 'none',
-                    color: 'var(--primary-blue)',
-                    fontSize: '0.8rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                  }}
-                >
-                  <Navigation size={13} />
-                  {locating ? t('report.detectingGps', 'Detecting GPS...') : t('report.detectGps', 'Use Current GPS')}
-                </button>
-              </div>
-
-              <div style={{ position: 'relative' }}>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  className="form-input"
-                  placeholder={t('report.locationPlaceholder', 'Enter the location or landmark')}
-                  value={formData.location}
-                  onChange={handleChange}
-                  required
-                  style={{ paddingLeft: '2.5rem' }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: '12px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    color: '#64748B',
-                    pointerEvents: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                >
-                  <MapPin size={18} />
+            {/* Section 1: Issue Information */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '0.6rem', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'var(--primary-blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem' }}>
+                  1
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0, color: 'var(--primary-navy)' }}>
+                    {isNepali ? 'समस्याको आधारभूत जानकारी' : 'Issue Information'}
+                  </h3>
+                  <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+                    {isNepali ? 'समस्याको शीर्षक, विधा र प्राथमिकता छनोट गर्नुहोस्' : 'Specify title, municipal department category, and urgency'}
+                  </span>
                 </div>
               </div>
+
+              <Input
+                label={t('report.issueTitle', 'Issue Title')}
+                name="title"
+                placeholder={t('report.issueTitlePlaceholder', 'Large pothole near Lakeside road')}
+                value={formData.title}
+                onChange={handleChange}
+                required
+                hint={t('report.issueTitleHint', 'Keep the title brief, clear, and descriptive.')}
+              />
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.25rem' }}>
+                <Select
+                  label={t('report.category', 'Municipal Category')}
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  options={categoryOptions}
+                  required
+                  placeholder={null}
+                />
+
+                <Select
+                  label={t('report.priority', 'Priority Level')}
+                  name="priority"
+                  value={formData.priority}
+                  onChange={handleChange}
+                  options={priorityOptions}
+                  required
+                  placeholder={null}
+                />
+              </div>
             </div>
 
-            {/* Photo Upload */}
-            <div className="form-group" style={{ marginTop: '1.25rem' }}>
-              <label className="form-label">
-                <span>{t('report.photoEvidence', 'Upload Evidence Photo (Optional)')}</span>
-              </label>
+            {/* Section 2: Detailed Description */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '0.6rem', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'var(--primary-blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem' }}>
+                  2
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0, color: 'var(--primary-navy)' }}>
+                    {isNepali ? 'विस्तृत विवरण' : 'Detailed Description'}
+                  </h3>
+                  <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+                    {isNepali ? 'प्राविधिक टोलीलाई समस्या बुझ्न मद्दत पुग्ने सबै तथ्य खुलाउनुहोस्' : 'Provide context to help municipal field crews evaluate the problem'}
+                  </span>
+                </div>
+              </div>
 
-              {!imagePreview ? (
-                <label className="file-upload-zone" htmlFor="issueImage">
+              <TextArea
+                label={t('report.description', 'Detailed Description')}
+                name="description"
+                placeholder={t('report.descriptionPlaceholder', 'Please describe the issue and provide any useful details.')}
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows={4}
+                hint={t('report.descriptionHint', 'Include all relevant context that helps municipal engineers evaluate the problem.')}
+              />
+            </div>
+
+            {/* Section 3: Location */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '0.6rem', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'var(--primary-blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem' }}>
+                  3
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0, color: 'var(--primary-navy)' }}>
+                    {isNepali ? 'स्थान र ठेगाना' : 'Location & Landmark'}
+                  </h3>
+                  <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+                    {isNepali ? 'सटीक ठेगाना प्रविष्ट गर्नुहोस् वा स्वचालित जीपीएस प्रयोग गर्नुहोस्' : 'Enter nearest landmark or use automated GPS detection'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                  <label className="form-label" htmlFor="location" style={{ marginBottom: 0 }}>
+                    <span>{t('report.location', 'Location / Landmark Address')} <span className="required">*</span></span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleGetLocation}
+                    disabled={locating}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.3rem',
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--primary-blue)',
+                      fontSize: '0.8rem',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <Navigation size={13} />
+                    {locating ? t('report.detectingGps', 'Detecting GPS...') : t('report.detectGps', 'Use Current GPS')}
+                  </button>
+                </div>
+
+                <div style={{ position: 'relative' }}>
                   <input
-                    type="file"
-                    id="issueImage"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    style={{ display: 'none' }}
+                    id="location"
+                    name="location"
+                    type="text"
+                    className="form-input"
+                    placeholder={t('report.locationPlaceholder', 'Enter the location or landmark')}
+                    value={formData.location}
+                    onChange={handleChange}
+                    required
+                    style={{ paddingLeft: '2.5rem' }}
                   />
                   <div
                     style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: '50%',
-                      background: 'var(--primary-blue-light)',
-                      color: 'var(--primary-blue)',
+                      position: 'absolute',
+                      left: '12px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      color: '#64748B',
+                      pointerEvents: 'none',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'center',
                     }}
                   >
-                    <UploadCloud size={24} />
+                    <MapPin size={18} />
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 700, color: 'var(--primary-navy)', fontSize: '0.95rem' }}>
-                      {t('report.photoUploadText', 'Click to upload photo or drag and drop')}
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
-                      {t('report.photoUploadHint', 'Supports JPEG, PNG, WEBP up to 5MB')}
-                    </div>
-                  </div>
-                </label>
-              ) : (
-                <div className="file-preview-wrapper" style={{ width: '100%' }}>
-                  <img src={imagePreview} alt="Preview" className="file-preview-image" />
-                  <button
-                    type="button"
-                    className="file-remove-btn"
-                    onClick={removeImage}
-                    title="Remove image"
-                  >
-                    <X size={16} />
-                  </button>
                 </div>
-              )}
+              </div>
+            </div>
+
+            {/* Section 4: Evidence Photo */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1.25rem', paddingBottom: '0.6rem', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ width: 28, height: 28, borderRadius: '50%', backgroundColor: 'var(--primary-blue)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: '0.85rem' }}>
+                  4
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', margin: 0, color: 'var(--primary-navy)' }}>
+                    {isNepali ? 'प्रमाण स्वरूप फोटो' : 'Evidence & Photographic Proof'}
+                  </h3>
+                  <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+                    {isNepali ? 'स्थलगत मर्मत टोलीलाई प्रमाणित गर्न फोटो संलग्न गर्नुहोस्' : 'Optional photo attachment for field verification'}
+                  </span>
+                </div>
+              </div>
+
+              <div className="form-group">
+                {!imagePreview ? (
+                  <label className="file-upload-zone" htmlFor="issueImage">
+                    <input
+                      type="file"
+                      id="issueImage"
+                      name="image"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      style={{ display: 'none' }}
+                    />
+                    <div
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: '50%',
+                        background: 'var(--primary-blue-light)',
+                        color: 'var(--primary-blue)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <UploadCloud size={24} />
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, color: 'var(--primary-navy)', fontSize: '0.95rem' }}>
+                        {t('report.photoUploadText', 'Click to upload photo or drag and drop')}
+                      </div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                        {t('report.photoUploadHint', 'Supports JPEG, PNG, WEBP up to 5MB')}
+                      </div>
+                    </div>
+                  </label>
+                ) : (
+                  <div className="file-preview-wrapper" style={{ width: '100%' }}>
+                    <img src={imagePreview} alt="Preview" className="file-preview-image" />
+                    <button
+                      type="button"
+                      className="file-remove-btn"
+                      onClick={removeImage}
+                      title="Remove image"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Submit Action */}
@@ -368,7 +430,7 @@ export const ReportIssue = () => {
                 <span>{t('report.privacyAssurance', 'Verified submission under municipal records')}</span>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', width: 'auto' }}>
                 <Button type="button" variant="secondary" onClick={() => navigate(-1)}>
                   {t('report.cancel', 'Cancel')}
                 </Button>

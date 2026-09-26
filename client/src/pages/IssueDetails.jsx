@@ -186,7 +186,7 @@ export const IssueDetails = () => {
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
                 gap: '1rem',
                 paddingTop: '1.5rem',
                 borderTop: '1px solid var(--border-light)',

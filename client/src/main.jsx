@@ -9,6 +9,7 @@ import App from './App';
 // Import CSS Design System
 import './styles/variables.css';
 import './styles/global.css';
+import './styles/header.css';
 import './styles/components.css';
 import './styles/pages.css';
 

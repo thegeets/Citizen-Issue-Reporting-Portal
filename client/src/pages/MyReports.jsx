@@ -17,7 +17,7 @@ import { StatusBadge, PriorityBadge } from '../components/common/Badge';
 import Button from '../components/common/Button';
 import Modal from '../components/common/Modal';
 import { Input, TextArea, Select } from '../components/common/Input';
-import Loader from '../components/common/Loader';
+import { CardSkeleton } from '../components/common/Skeleton';
 import EmptyState from '../components/common/EmptyState';
 
 const CATEGORIES = [
@@ -243,7 +243,7 @@ export const MyReports = () => {
 
       {/* Content */}
       {loading ? (
-        <Loader message={t('myReports.loading', 'Loading your submitted reports...')} fullHeight />
+        <CardSkeleton count={6} />
       ) : issues.length === 0 ? (
         <EmptyState
           title={
@@ -257,7 +257,7 @@ export const MyReports = () => {
           onAction={() => navigate('/report')}
         />
       ) : (
-        <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))' }}>
+        <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 320px), 1fr))' }}>
           {issues.map((issue) => {
             const isPending = issue.status === 'Submitted';
 

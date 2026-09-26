@@ -101,7 +101,7 @@ export const Profile = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 220px), 1fr))',
               gap: '1.25rem',
               paddingTop: '1.5rem',
               borderTop: '1px solid var(--border-light)',

@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/common/Button';
 import { StatusBadge, PriorityBadge } from '../components/common/Badge';
-import Loader from '../components/common/Loader';
+import { CardSkeleton } from '../components/common/Skeleton';
 import EmptyState from '../components/common/EmptyState';
 
 const CATEGORY_ICONS = {
@@ -291,7 +291,7 @@ export const Home = () => {
             <p>{t('home.categoriesSubtitle')}</p>
           </div>
 
-          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))' }}>
+          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 250px), 1fr))' }}>
             {CATEGORY_KEYS.map((catKey) => {
               const config = CATEGORY_ICONS[catKey] || CATEGORY_ICONS['Other'];
               const Icon = config.icon;
@@ -334,7 +334,7 @@ export const Home = () => {
           </div>
 
           {loading ? (
-            <Loader message="Fetching recent reports..." />
+            <CardSkeleton count={3} />
           ) : recentIssues.length === 0 ? (
             <EmptyState
               title={t('home.noReportsTitle')}
@@ -343,7 +343,7 @@ export const Home = () => {
               onAction={() => navigate('/report')}
             />
           ) : (
-            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))' }}>
+            <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 300px), 1fr))' }}>
               {recentIssues.map((issue) => (
                 <div key={issue._id} className="civic-card civic-card-interactive" onClick={() => navigate(`/issues/${issue._id}`)} style={{ cursor: 'pointer' }}>
                   <div className="civic-card-header">
@@ -396,7 +396,7 @@ export const Home = () => {
             <p>{t('home.whyUseSubtitle')}</p>
           </div>
 
-          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+          <div className="grid-responsive" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '1.5rem' }}>
             {WHY_USE_FEATURES.map((feat) => {
               const Icon = feat.icon;
               return (
