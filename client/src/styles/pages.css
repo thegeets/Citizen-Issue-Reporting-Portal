@@ -504,6 +504,215 @@
 }
 
 /* ==========================================================================
+   Admin Login Page (Responsive & Viewport-Adaptive)
+   ========================================================================== */
+.admin-login-wrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: #0A2540;
+  background-image: radial-gradient(circle at 50% 30%, #133E68 0%, #0A2540 100%);
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem 2rem;
+  background-color: white;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+  margin: auto 0;
+  overflow: hidden;
+}
+
+.admin-login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.admin-login-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #0A2540, #0066CC);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  box-shadow: 0 8px 16px rgba(0, 102, 204, 0.3);
+  flex-shrink: 0;
+}
+
+.admin-login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-navy);
+  line-height: 1.25;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.admin-login-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+
+.admin-password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.admin-password-input {
+  padding-left: 2.5rem !important;
+  padding-right: 2.5rem !important;
+}
+
+.admin-password-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748B;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+.admin-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+
+.admin-password-toggle:hover {
+  color: var(--text-primary);
+}
+
+.admin-login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.admin-login-back-link {
+  font-size: 0.85rem;
+  color: var(--primary-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.admin-login-back-link:hover {
+  text-decoration: underline;
+}
+
+/* Tablet & Mobile Media Queries for Admin Login */
+@media (max-width: 640px) {
+  .admin-login-wrapper {
+    padding: 1.25rem 1rem;
+  }
+
+  .admin-login-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .admin-login-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .admin-login-title {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-login-wrapper {
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-login-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: var(--radius-md);
+    box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.4);
+  }
+
+  .admin-login-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .admin-login-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.75rem;
+  }
+
+  .admin-login-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .admin-login-title {
+    font-size: 1.25rem;
+  }
+
+  .admin-login-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-login-wrapper {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .admin-login-card {
+    padding: 1.5rem 0.875rem;
+  }
+
+  .admin-login-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 0.5rem;
+  }
+
+  .admin-login-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .admin-login-title {
+    font-size: 1.15rem;
+  }
+
+  .admin-login-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+/* ==========================================================================
    Admin Dashboard & Layout
    ========================================================================== */
 .admin-layout {

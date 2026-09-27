@@ -40,46 +40,14 @@ export const AdminLogin = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1.5rem',
-        backgroundColor: '#0A2540',
-        backgroundImage: 'radial-gradient(circle at 50% 30%, #133E68 0%, #0A2540 100%)',
-      }}
-    >
-      <div
-        className="civic-card"
-        style={{
-          width: '100%',
-          maxWidth: '440px',
-          padding: '2.5rem 2rem',
-          backgroundColor: 'white',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-        }}
-      >
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div
-            style={{
-              width: 58,
-              height: 58,
-              borderRadius: 'var(--radius-md)',
-              background: 'linear-gradient(135deg, #0A2540, #0066CC)',
-              color: 'white',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginBottom: '1rem',
-              boxShadow: '0 8px 16px rgba(0, 102, 204, 0.3)',
-            }}
-          >
+    <div className="admin-login-wrapper">
+      <div className="civic-card admin-login-card">
+        <div className="admin-login-header">
+          <div className="admin-login-icon">
             <Shield size={30} />
           </div>
-          <h2 style={{ fontSize: '1.5rem', color: 'var(--primary-navy)' }}>Municipal Admin Console</h2>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.3rem' }}>
+          <h2 className="admin-login-title">Municipal Admin Console</h2>
+          <p className="admin-login-subtitle">
             Authorized Personnel & Engineering Control Room
           </p>
         </div>
@@ -100,43 +68,24 @@ export const AdminLogin = () => {
             <label className="form-label" htmlFor="adminPass">
               <span>Security Access Key <span className="required">*</span></span>
             </label>
-            <div style={{ position: 'relative' }}>
+            <div className="admin-password-wrapper">
               <input
                 id="adminPass"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
-                className="form-input"
+                className="form-input admin-password-input"
                 placeholder="Enter admin password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  left: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: '#64748B',
-                  pointerEvents: 'none',
-                }}
-              >
+              <div className="admin-password-icon">
                 <Lock size={18} />
               </div>
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '12px',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  color: '#64748B',
-                  cursor: 'pointer',
-                }}
+                className="admin-password-toggle"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -149,8 +98,8 @@ export const AdminLogin = () => {
           </Button>
         </form>
 
-        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
-          <Link to="/" style={{ fontSize: '0.85rem', color: 'var(--primary-blue)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+        <div className="admin-login-footer">
+          <Link to="/" className="admin-login-back-link">
             ← Return to Public Citizen Portal
           </Link>
         </div>
