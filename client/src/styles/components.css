@@ -856,20 +856,46 @@
 .table-responsive {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-light);
   background: white;
   display: block;
+  box-sizing: border-box;
+}
+
+/* Custom sleek scrollbar for table-responsive */
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
 }
 
 .civic-table {
   width: 100%;
-  min-width: 640px;
+  min-width: 760px;
   border-collapse: collapse;
   text-align: left;
   font-size: 0.875rem;
+  box-sizing: border-box;
+}
+
+.civic-table-citizens {
+  min-width: 880px;
 }
 
 .civic-table th {
@@ -895,3 +921,4 @@
 .civic-table tbody tr:hover {
   background-color: #F8FAFC;
 }
+

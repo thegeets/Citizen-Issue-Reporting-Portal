@@ -66,9 +66,9 @@ export const AdminUsers = () => {
           description="No registered citizen records match your query."
         />
       ) : (
-        <div className="civic-card">
+        <div className="civic-card" style={{ width: '100%', maxWidth: '100%', minWidth: 0, overflow: 'hidden' }}>
           <div className="table-responsive">
-            <table className="civic-table">
+            <table className="civic-table civic-table-citizens">
               <thead>
                 <tr>
                   <th>Citizen Profile</th>
@@ -97,26 +97,27 @@ export const AdminUsers = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontSize: '0.85rem',
+                            flexShrink: 0,
                           }}
                         >
                           {user.name.charAt(0).toUpperCase()}
                         </div>
-                        <div>
-                          <strong style={{ color: 'var(--primary-navy)' }}>{user.name}</strong>
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Citizen ID: {user._id.slice(-6).toUpperCase()}</div>
+                        <div style={{ minWidth: 0 }}>
+                          <strong style={{ color: 'var(--primary-navy)', whiteSpace: 'nowrap' }}>{user.name}</strong>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>Citizen ID: {user._id.slice(-6).toUpperCase()}</div>
                         </div>
                       </div>
                     </td>
 
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Mail size={13} color="var(--primary-blue)" /> {user.email}
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                        <Mail size={13} color="var(--primary-blue)" style={{ flexShrink: 0 }} /> {user.email}
                       </div>
                     </td>
 
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <Phone size={13} color="var(--primary-blue)" /> {user.phone || '—'}
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                        <Phone size={13} color="var(--primary-blue)" style={{ flexShrink: 0 }} /> {user.phone || '—'}
                       </div>
                     </td>
 
@@ -124,20 +125,20 @@ export const AdminUsers = () => {
                       {new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
 
-                    <td>
-                      <span className="badge badge-category" style={{ fontWeight: 700 }}>
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <span className="badge badge-category" style={{ fontWeight: 700, whiteSpace: 'nowrap' }}>
                         <FileText size={12} /> {user.stats?.totalReports || 0} Reports
                       </span>
                     </td>
 
-                    <td>
-                      <span className="badge badge-status-resolved">
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <span className="badge badge-status-resolved" style={{ whiteSpace: 'nowrap' }}>
                         <CheckCircle2 size={12} /> {user.stats?.resolvedReports || 0} Resolved
                       </span>
                     </td>
 
-                    <td>
-                      <span className="badge badge-status-submitted">
+                    <td style={{ whiteSpace: 'nowrap' }}>
+                      <span className="badge badge-status-submitted" style={{ whiteSpace: 'nowrap' }}>
                         <Clock size={12} /> {user.stats?.pendingReports || 0} Pending
                       </span>
                     </td>
