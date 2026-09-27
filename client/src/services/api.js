@@ -1,4 +1,17 @@
-const API_BASE = (import.meta.env.VITE_API_URL || 'https://citizen-issue-reporting-portal.onrender.com/api').replace(/\/+$/, '');
+const getApiBaseUrl = () => {
+  const envUrl = (import.meta.env.VITE_API_URL || '').trim();
+  if (!envUrl) {
+    return 'https://citizen-issue-reporting-portal.onrender.com/api';
+  }
+  const clean = envUrl.replace(/\/+$/, '');
+  // If user provided origin without /api (and not a relative /api proxy), append /api
+  if (clean.startsWith('http') && !clean.endsWith('/api')) {
+    return `${clean}/api`;
+  }
+  return clean;
+};
+
+const API_BASE = getApiBaseUrl();
 
 // Helper to get auth header with token
 const getAuthHeaders = (isFormData = false) => {
