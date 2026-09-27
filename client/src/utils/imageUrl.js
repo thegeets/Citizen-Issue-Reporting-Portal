@@ -23,9 +23,8 @@ export const getImageUrl = (imagePath) => {
   // Ensure path starts with /
   const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
 
-  // In local Vite development or standard setup, Vite proxies /uploads to http://127.0.0.1:5000.
-  // Direct fallback to backend server if configured
-  const backendBase = import.meta.env.VITE_SERVER_URL || '';
+  // In local Vite development or standard setup, Vite proxies /uploads to backend or direct fallback.
+  const backendBase = (import.meta.env.VITE_SERVER_URL || 'https://citizen-issue-reporting-portal.onrender.com').replace(/\/+$/, '');
   if (backendBase) {
     return `${backendBase}${cleanPath}`;
   }

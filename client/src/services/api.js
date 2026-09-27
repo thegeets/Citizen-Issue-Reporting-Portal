@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = (import.meta.env.VITE_API_URL || 'https://citizen-issue-reporting-portal.onrender.com/api').replace(/\/+$/, '');
 
 // Helper to get auth header with token
 const getAuthHeaders = (isFormData = false) => {
@@ -18,14 +18,14 @@ const getAuthHeaders = (isFormData = false) => {
 
 // Generic fetch wrapper with robust error extraction & network handling
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE}${endpoint}`;
+  const url = `${API_BASE}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
   let response;
 
   try {
     response = await fetch(url, options);
   } catch (netErr) {
     console.error(`[API Network Error] Failed to fetch ${url}:`, netErr.message);
-    throw new Error('Unable to connect to the backend server. Please verify the backend is running at http://localhost:5000.');
+    throw new Error('Unable to connect to the backend server. Please verify your internet connection or backend deployment status.');
   }
 
   let data;
@@ -42,7 +42,7 @@ async function request(endpoint, options = {}) {
     const text = await response.text();
     if (!response.ok) {
       if (response.status === 502 || response.status === 503 || response.status === 504) {
-        throw new Error('Backend server is currently unreachable on port 5000. Please start the backend service.');
+        throw new Error('Backend server is currently starting up or unreachable on Render. Please wait a few seconds and try again.');
       }
       throw new Error(`Server returned HTTP ${response.status}: ${response.statusText || 'Error'}`);
     }
